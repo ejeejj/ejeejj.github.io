@@ -2,29 +2,52 @@
 <html>
   <head>
     <title>QR AR Video</title>
-    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js/aframe/build/aframe-ar.js"></script>
+    <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
+    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+    <script>
+      AFRAME.registerComponent('vidhandler', {
+        init: function() {
+          let el = this.el;
+          let video = document.querySelector("#company-video");
+          
+          el.addEventListener('markerFound', function() {
+            video.play();
+            console.log("마커 발견, 동영상 재생");
+          });
+          
+          el.addEventListener('markerLost', function() {
+            video.pause();
+            console.log("마커 사라짐, 동영상 일시 정지");
+          });
+        }
+      });
+    </script>
   </head>
   <body style="margin: 0; overflow: hidden;">
-    <a-scene embedded arjs>
+    <a-scene embedded arjs='sourceType: webcam; debugUIEnabled: false; detectionMode: mono_and_matrix; matrixCodeType: 3x3;'>
       <a-assets>
-        <!-- 동영상 파일 -->
-        <video id="company-video" autoplay loop="true" muted playsinline src="assets/mainvideo.mp4" preload="auto"></video>
+        <video id="company-video" src="assets/mainvideo.mp4" preload="auto" muted playsinline></video>
       </a-assets>
-
-      <!-- QR 코드 마커 -->
-      <a-marker type="pattern" url="assets/qr-marker.patt">
-        <!-- QR 코드 위에 나타날 동영상 -->
+      
+      <!-- QR 코드를 바코드 마커로 인식 -->
+      <a-marker type='barcode' value='0' vidhandler>
         <a-video 
           src="#company-video"
-          width="3" height="2" 
-          position="0 0 0" rotation="-90 0 0">
+          width="2" height="1.5" 
+          position="0 0.5 0" rotation="-90 0 0">
         </a-video>
       </a-marker>
-
+      
+      <!-- 또는 커스텀 패턴 마커 사용 -->
+      <a-marker type="pattern" preset="custom" url="assets/qr-marker.patt" vidhandler>
+        <a-video 
+          src="#company-video"
+          width="2" height="1.5" 
+          position="0 0.5 0" rotation="-90 0 0">
+        </a-video>
+      </a-marker>
+      
       <a-entity camera></a-entity>
     </a-scene>
   </body>
 </html>
-
-
