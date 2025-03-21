@@ -1,22 +1,30 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Smart Business Card</title>
+    <title>QR AR Video</title>
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js/aframe/build/aframe-ar.js"></script>
   </head>
   <body style="margin: 0; overflow: hidden;">
     <a-scene embedded arjs>
       <a-assets>
-        <video id="company-video" autoplay loop="true" muted src="assets/mainvideo.mp4" preload="auto"></video>
+        <!-- 동영상 파일 -->
+        <video id="company-video" autoplay loop="true" muted playsinline src="assets/mainvideo.mp4" preload="auto"></video>
       </a-assets>
 
-      <a-marker preset="hiro">
-        <a-video src="#company-video" width="3" height="2" position="0 1 0" rotation="-90 0 0"></a-video>
+      <!-- QR 코드 마커 -->
+      <a-marker type="pattern" url="assets/qr-marker.patt">
+        <!-- QR 코드 위에 나타날 동영상 -->
+        <a-video 
+          src="#company-video"
+          width="3" height="2" 
+          position="0 0 0" rotation="-90 0 0">
+        </a-video>
       </a-marker>
 
       <a-entity camera></a-entity>
     </a-scene>
   </body>
 </html>
+
 
